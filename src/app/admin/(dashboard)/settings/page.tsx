@@ -112,12 +112,16 @@ export default function SettingsPage() {
   const isMaintenance = settings.maintenance_mode === "true";
 
   // Preview status config
-  const statusPreview = {
-    online: { dot: "bg-green-500", label: "Online", color: "text-green-400" },
-    busy: { dot: "bg-red-500", label: "Busy", color: "text-red-400" },
-    away: { dot: "bg-yellow-500", label: "Away", color: "text-yellow-400" },
-    offline: { dot: "bg-neutral-500", label: "Offline", color: "text-neutral-400" },
-  }[settings.online_status || "online"];
+const statusConfig = {
+  online: { dot: "bg-green-500", label: "Online", color: "text-green-400" },
+  busy: { dot: "bg-red-500", label: "Busy", color: "text-red-400" },
+  away: { dot: "bg-yellow-500", label: "Away", color: "text-yellow-400" },
+  offline: { dot: "bg-neutral-500", label: "Offline", color: "text-neutral-400" },
+};
+
+const statusPreview =
+  statusConfig[settings.online_status as keyof typeof statusConfig] ||
+  statusConfig.online;
 
   return (
     <form onSubmit={handleSave} className="space-y-6 max-w-4xl">

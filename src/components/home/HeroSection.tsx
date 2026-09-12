@@ -6,6 +6,7 @@ import { Icons } from "@/lib/icons";
 import LiveVisitor from "@/components/LiveVisitor";
 import HeroMedia from "./HeroMedia";
 import type { Profile } from "@/lib/types";
+import type React from "react";
 
 type Props = {
   profile: Profile;
@@ -14,7 +15,7 @@ type Props = {
 
 const SOCIAL_MAP: Record<
   string,
-  { label: string; Icon: (p: any) => JSX.Element }
+  { label: string; Icon: (p: any) => React.ReactElement }
 > = {
   github: { label: "GitHub", Icon: Icons.Github },
   twitter: { label: "Twitter", Icon: Icons.Twitter },

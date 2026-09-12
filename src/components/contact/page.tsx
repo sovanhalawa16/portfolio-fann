@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase-server";
 import { Icons } from "@/lib/icons";
 import ContactForm from "@/components/contact/ContactForm";
 import ScrollReveal from "@/components/ScrollReveal";
+import type React from "react";
 
 export const metadata = {
   title: "Contact",
@@ -14,7 +15,7 @@ export const revalidate = 60;
 
 const SOCIAL_MAP: Record<
   string,
-  { label: string; Icon: (p: any) => JSX.Element }
+  { label: string; Icon: (p: any) => React.ReactElement }
 > = {
   github: { label: "GitHub", Icon: Icons.Github },
   twitter: { label: "Twitter", Icon: Icons.Twitter },

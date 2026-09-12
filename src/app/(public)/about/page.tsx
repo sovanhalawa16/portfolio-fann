@@ -4,6 +4,7 @@ import { Icons } from "@/lib/icons";
 import { TECH_LIST, getTechLogo } from "@/lib/techStack";
 import ScrollReveal from "@/components/ScrollReveal";
 import AnimatedProgress from "@/components/AnimatedProgress";
+import type React from "react";
 
 export const metadata = {
   title: "About",
@@ -15,7 +16,7 @@ export const revalidate = 60;
 
 const SOCIAL_MAP: Record<
   string,
-  { label: string; Icon: (p: any) => JSX.Element }
+  { label: string; Icon: (p: any) => React.ReactElement }
 > = {
   github: { label: "GitHub", Icon: Icons.Github },
   twitter: { label: "Twitter", Icon: Icons.Twitter },

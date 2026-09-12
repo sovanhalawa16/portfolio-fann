@@ -16,9 +16,12 @@ export type Post = {
   title: string;
   slug: string;
   excerpt: string | null;
+  content: string | null;          
   cover_image: string | null;
   published_at: string;
   views: number;
+  category_id: number | null;       
+  status?: string;                  
   reading_time?: number;
   categories: { name: string } | null;
 };
