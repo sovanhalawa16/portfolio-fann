@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase-server";
+import SiteViewTracker from "@/components/SiteViewTracker";
 import HeroSection from "@/components/home/HeroSection";
 import {
   StatsBar,
@@ -87,25 +88,16 @@ export default async function HomePage() {
 
   const experiences = (experiencesRes.data as Experience[] | null) || [];
 
-  const { data: allPosts } = await supabase
-    .from("posts")
-    .select("views")
-    .eq("status", "published");
-  const totalViews = (allPosts || []).reduce(
-    (sum, p) => sum + (p.views || 0),
-    0
-  );
-
   return (
     <>
+      <SiteViewTracker />
       <HeroSection profile={profile as Profile} media={heroMedia} />
 
       <StatsBar
-        postsCount={posts.length}
-        projectsCount={totalProjects}
-        publicationsCount={totalPublications}
-        totalViews={totalViews}
-      />
+  postsCount={posts.length}
+  projectsCount={totalProjects}
+  publicationsCount={totalPublications}
+/>
 
       <FeaturedProjects projects={featuredProjects} />
 

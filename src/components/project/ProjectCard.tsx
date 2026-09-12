@@ -12,6 +12,7 @@ type Props = {
     tech_stack: string[];
     featured: boolean;
     year: number | null;
+    views: number;      // ← TAMBAH
     demo_url: string | null;
     repo_url: string | null;
   };
@@ -62,6 +63,20 @@ export default function ProjectCard({ project }: Props) {
         <p className="text-[11px] text-neutral-500 line-clamp-2 mb-2.5 min-h-[2rem] hidden sm:block">
           {project.short_description || "Lihat detail project ini."}
         </p>
+        <div className="flex items-center justify-between gap-2 mb-3">
+  <div className="flex items-center gap-1.5 text-[10px] text-neutral-500">
+    <Icons.Eye className="w-3 h-3" />
+    <span className="tabular-nums">
+      {(project.views || 0).toLocaleString("id-ID")}
+    </span>
+    <span className="text-neutral-600">views</span>
+  </div>
+  {project.year && (
+    <span className="text-[10px] text-neutral-600 tabular-nums">
+      {project.year}
+    </span>
+  )}
+</div>
 
         {/* TECH STACK */}
         {project.tech_stack && project.tech_stack.length > 0 && (

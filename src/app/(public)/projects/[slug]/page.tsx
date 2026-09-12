@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase-server";
 import { Icons } from "@/lib/icons";
 import { TECH_LIST, getTechLogo } from "@/lib/techStack";
+import ProjectViewTracker from "@/components/project/ProjectViewTracker";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -73,6 +74,7 @@ export default async function ProjectDetailPage({ params }: Props) {
 
   return (
     <article className="mx-auto max-w-4xl px-6 lg:px-8 py-12 md:py-16">
+      <ProjectViewTracker projectId={project.id} />
       {/* BACK */}
       <Link
         href="/projects"
@@ -109,6 +111,13 @@ export default async function ProjectDetailPage({ params }: Props) {
               {project.client}
             </span>
           )}
+          <span className="inline-flex items-center gap-1 rounded-full border border-neutral-800 bg-neutral-900/60 text-neutral-400 px-2.5 py-1">
+  <Icons.Eye className="w-3 h-3" />
+  <span className="tabular-nums">
+    {(project.views || 0).toLocaleString("id-ID")}
+  </span>
+  views
+</span>
         </div>
 
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4 leading-[1.15]">

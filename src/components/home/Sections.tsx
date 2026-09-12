@@ -5,23 +5,21 @@ import ScrollReveal from "@/components/ScrollReveal";
 import AnimatedCounter from "@/components/AnimatedCounter";
 import AnimatedProgress from "@/components/AnimatedProgress";
 import type { Post, Project, Profile, Experience } from "@/lib/types";
+import SiteViewsDisplay from "@/components/SiteViewsDisplay";
 
 export function StatsBar({
   postsCount,
   projectsCount,
   publicationsCount,
-  totalViews,
 }: {
   postsCount: number;
   projectsCount: number;
   publicationsCount: number;
-  totalViews: number;
 }) {
   const stats = [
     { icon: Icons.FileText, label: "Articles", value: postsCount, color: "text-violet-400" },
     { icon: Icons.Briefcase, label: "Projects", value: projectsCount, color: "text-blue-400" },
     { icon: Icons.Bookmark, label: "Publications", value: publicationsCount, color: "text-fuchsia-400" },
-    { icon: Icons.Eye, label: "Total Views", value: totalViews, color: "text-green-400" },
   ];
 
   return (
@@ -45,6 +43,23 @@ export function StatsBar({
               </div>
             </ScrollReveal>
           ))}
+
+          {/* TOTAL VIEWS — LIVE, SELF-FETCH */}
+          <ScrollReveal delay={240}>
+            <div className="flex items-center gap-3 md:gap-4">
+              <div className="shrink-0 w-10 h-10 md:w-11 md:h-11 rounded-xl bg-neutral-900 border border-neutral-800 flex items-center justify-center text-green-400">
+                <Icons.Eye className="w-5 h-5" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-lg md:text-2xl font-bold leading-none tabular-nums">
+                  <SiteViewsDisplay />
+                </div>
+                <div className="text-xs md:text-sm text-neutral-500 mt-1 truncate">
+                  Total Views
+                </div>
+              </div>
+            </div>
+          </ScrollReveal>
         </div>
       </div>
     </section>
