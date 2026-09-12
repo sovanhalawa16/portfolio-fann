@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Icons } from "@/lib/icons";
 import { TECH_LIST, getTechLogo } from "@/lib/techStack";
+import ProjectViewsDisplay from "./ProjectViewsDisplay";
 
 type Props = {
   project: {
@@ -12,7 +13,7 @@ type Props = {
     tech_stack: string[];
     featured: boolean;
     year: number | null;
-    views: number;      // ← TAMBAH
+    views?: number | null;
     demo_url: string | null;
     repo_url: string | null;
   };
@@ -49,34 +50,26 @@ export default function ProjectCard({ project }: Props) {
 
       {/* CONTENT */}
       <div className="p-3 md:p-4">
-        <div className="flex items-start justify-between gap-2 mb-1.5">
-          <h3 className="text-xs sm:text-sm font-semibold line-clamp-1 leading-snug group-hover:text-violet-300 transition flex-1">
-            {project.title}
-          </h3>
+        <h3 className="text-xs sm:text-sm font-semibold line-clamp-1 leading-snug group-hover:text-violet-300 transition mb-1.5">
+          {project.title}
+        </h3>
+
+        <p className="text-[11px] text-neutral-500 line-clamp-2 mb-3 min-h-[2rem] hidden sm:block">
+          {project.short_description || "Lihat detail project ini."}
+        </p>
+
+        {/* META: VIEWS + YEAR */}
+        <div className="flex items-center justify-between gap-2 mb-3 text-[10px] text-neutral-500">
+          <ProjectViewsDisplay
+            projectId={project.id}
+            initialViews={project.views || 0}
+          />
           {project.year && (
-            <span className="text-[10px] text-neutral-600 tabular-nums shrink-0 mt-0.5">
+            <span className="text-neutral-600 tabular-nums shrink-0">
               {project.year}
             </span>
           )}
         </div>
-
-        <p className="text-[11px] text-neutral-500 line-clamp-2 mb-2.5 min-h-[2rem] hidden sm:block">
-          {project.short_description || "Lihat detail project ini."}
-        </p>
-        <div className="flex items-center justify-between gap-2 mb-3">
-  <div className="flex items-center gap-1.5 text-[10px] text-neutral-500">
-    <Icons.Eye className="w-3 h-3" />
-    <span className="tabular-nums">
-      {(project.views || 0).toLocaleString("id-ID")}
-    </span>
-    <span className="text-neutral-600">views</span>
-  </div>
-  {project.year && (
-    <span className="text-[10px] text-neutral-600 tabular-nums">
-      {project.year}
-    </span>
-  )}
-</div>
 
         {/* TECH STACK */}
         {project.tech_stack && project.tech_stack.length > 0 && (

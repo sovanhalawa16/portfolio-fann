@@ -14,13 +14,13 @@ export default async function ProjectsPage() {
   const supabase = await createClient();
 
   const { data: projects } = await supabase
-    .from("portfolio")
-    .select(
-      "id, title, slug, short_description, thumbnail, tech_stack, featured, year, demo_url, repo_url"
-    )
-    .eq("status", "published")
-    .order("featured", { ascending: false })
-    .order("year", { ascending: false });
+  .from("portfolio")
+  .select(
+    "id, title, slug, short_description, thumbnail, tech_stack, featured, year, views, demo_url, repo_url"
+  )
+  .eq("status", "published")
+  .order("featured", { ascending: false })
+  .order("year", { ascending: false });
 
   const projectsData = projects || [];
   const featuredCount = projectsData.filter((p) => p.featured).length;

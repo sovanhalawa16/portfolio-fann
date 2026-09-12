@@ -55,13 +55,12 @@ export default async function ProjectDetailPage({ params }: Props) {
   const gallery = Array.isArray(project.gallery) ? project.gallery : [];
   const techStack = Array.isArray(project.tech_stack) ? project.tech_stack : [];
 
-  // Related projects (share at least 1 tech)
   const { data: allOthers } = await supabase
-    .from("portfolio")
-    .select("id, title, slug, thumbnail, short_description, tech_stack, featured, year, demo_url, repo_url")
-    .eq("status", "published")
-    .neq("id", project.id)
-    .limit(10);
+  .from("portfolio")
+  .select("id, title, slug, thumbnail, short_description, tech_stack, featured, year, views, demo_url, repo_url")
+  .eq("status", "published")
+  .neq("id", project.id)
+  .limit(10);
 
   const related = (allOthers || [])
     .map((p) => ({
