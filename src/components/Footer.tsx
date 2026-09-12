@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase-browser";
-import VisitorCountries from "./VisitorCountries";
 
 export default function Footer() {
   const [authorName, setAuthorName] = useState("");
@@ -41,25 +40,15 @@ export default function Footer() {
   return (
     <footer className="border-t border-neutral-800/60 mt-24">
       <div className="mx-auto max-w-6xl px-6 py-8">
-        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6 md:gap-8">
-          {/* COPYRIGHT */}
-          <div className="flex-1 min-w-0">
-            <p className="text-xs text-neutral-500 leading-relaxed">
-              © {year}{" "}
-              <span className="text-neutral-400 font-medium">
-                {mounted && authorName
-                  ? authorName.toUpperCase()
-                  : "SOVANTRI PUTRA PASKAH HALAWA"}
-              </span>
-              . All rights reserved.
-            </p>
-          </div>
-
-          {/* VISITOR COUNTRIES */}
-          <div className="md:max-w-xs">
-            <VisitorCountries />
-          </div>
-        </div>
+        <p className="text-center text-xs text-neutral-500">
+          © {year}{" "}
+          <span className="text-neutral-400 font-medium">
+            {mounted && authorName
+              ? authorName.toUpperCase()
+              : "SOVANTRI PUTRA PASKAH HALAWA"}
+          </span>
+          . All rights reserved.
+        </p>
       </div>
     </footer>
   );

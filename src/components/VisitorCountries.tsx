@@ -9,18 +9,6 @@ type CountryStat = {
   visits: number;
 };
 
-// Kode negara → emoji bendera
-function getFlagEmoji(countryCode: string): string {
-  if (!countryCode || countryCode.length !== 2 || countryCode === "XX") {
-    return "🌐";
-  }
-  return countryCode
-    .toUpperCase()
-    .replace(/./g, (char) =>
-      String.fromCodePoint(127397 + char.charCodeAt(0))
-    );
-}
-
 export default function VisitorCountries() {
   const [stats, setStats] = useState<CountryStat[]>([]);
   const [total, setTotal] = useState(0);
@@ -30,7 +18,6 @@ export default function VisitorCountries() {
     const fetchStats = async () => {
       const supabase = createClient();
 
-      // Ambil semua visits (limit 10K buat performa)
       const { data, error } = await supabase
         .from("site_visits")
         .select("country_code, country_name")
@@ -41,7 +28,6 @@ export default function VisitorCountries() {
         return;
       }
 
-      // Aggregate per negara
       const map = new Map<string, { name: string; visits: number }>();
       data.forEach((row) => {
         const code = row.country_code || "XX";
@@ -54,7 +40,6 @@ export default function VisitorCountries() {
         }
       });
 
-      // Sort by visits desc, ambil top 5
       const sorted = Array.from(map.entries())
         .map(([code, { name, visits }]) => ({
           country_code: code,
@@ -62,7 +47,7 @@ export default function VisitorCountries() {
           visits,
         }))
         .sort((a, b) => b.visits - a.visits)
-        .slice(0, 5);
+        .slice(0, 6);
 
       setStats(sorted);
       setTotal(data.length);
@@ -70,15 +55,14 @@ export default function VisitorCountries() {
     };
 
     fetchStats();
-
-    // Refresh tiap 60 detik
     const interval = setInterval(fetchStats, 60000);
     return () => clearInterval(interval);
   }, []);
 
   if (loading) {
     return (
-      <div className="text-xs text-neutral-600">
+      <div className="flex items-center justify-center py-8 text-xs text-neutral-600">
+        <div className="inline-block h-4 w-4 border-2 border-neutral-800 border-t-violet-500 rounded-full animate-spin mr-2" />
         Memuat data pengunjung...
       </div>
     );
@@ -86,42 +70,110 @@ export default function VisitorCountries() {
 
   if (stats.length === 0) {
     return (
-      <div className="text-xs text-neutral-600">
-        Belum ada data pengunjung.
+      <div className="rounded-2xl border border-dashed border-neutral-800 p-8 text-center">
+        <div className="text-xs text-neutral-600">
+          Belum ada data pengunjung.
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-2.5">
-      <div className="flex items-center gap-2">
-        <span className="text-[10px] font-bold text-neutral-500 uppercase tracking-wider">
-          🌍 Visitors by Country
-        </span>
-        <span className="text-[10px] text-neutral-600 tabular-nums">
-          ({total.toLocaleString("id-ID")} total)
-        </span>
+    <div className="rounded-2xl border border-neutral-800 bg-neutral-900/40 p-5 md:p-6">
+      {/* HEADER */}
+      <div className="flex items-center justify-between gap-3 mb-5">
+        <div className="flex items-center gap-2.5">
+          <div className="w-9 h-9 rounded-xl bg-violet-500/10 border border-violet-500/30 flex items-center justify-center text-violet-400">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="w-4 h-4"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+            </svg>
+          </div>
+          <div>
+            <h3 className="text-sm md:text-base font-bold tracking-tight">
+              Visitors by Country
+            </h3>
+            <p className="text-[10px] md:text-xs text-neutral-500 mt-0.5">
+              Dari mana aja yang mampir
+            </p>
+          </div>
+        </div>
+
+        <div className="text-right shrink-0">
+          <div className="text-lg md:text-xl font-bold tabular-nums leading-none">
+            {total.toLocaleString("id-ID")}
+          </div>
+          <div className="text-[10px] text-neutral-500 mt-1">total kunjungan</div>
+        </div>
       </div>
 
-      <div className="space-y-1.5">
-        {stats.map((stat) => (
-          <div
-            key={stat.country_code}
-            className="flex items-center justify-between gap-3 text-xs"
-          >
-            <div className="flex items-center gap-2 min-w-0">
-              <span className="text-base shrink-0">
-                {getFlagEmoji(stat.country_code)}
-              </span>
-              <span className="text-neutral-400 truncate">
-                {stat.country_name}
-              </span>
+      {/* LIST */}
+      <div className="space-y-2">
+        {stats.map((stat) => {
+          const percent = total > 0 ? (stat.visits / total) * 100 : 0;
+          const hasFlag =
+            stat.country_code &&
+            stat.country_code.length === 2 &&
+            stat.country_code !== "XX";
+
+          return (
+            <div key={stat.country_code} className="group">
+              <div className="flex items-center gap-3 mb-1.5">
+                {/* FLAG */}
+                <div className="shrink-0 w-5 h-5 rounded overflow-hidden bg-neutral-950 border border-neutral-800 flex items-center justify-center">
+                  {hasFlag ? (
+                    <img
+                      src={`https://flagcdn.com/w40/${stat.country_code.toLowerCase()}.png`}
+                      alt={stat.country_name}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                      onError={(e) => {
+                        (e.target as HTMLImageElement).style.display = "none";
+                      }}
+                    />
+                  ) : (
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      className="w-3 h-3 text-neutral-500"
+                    >
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" />
+                    </svg>
+                  )}
+                </div>
+
+                {/* NAME */}
+                <span className="flex-1 min-w-0 text-xs md:text-sm text-neutral-300 truncate">
+                  {stat.country_name}
+                </span>
+
+                {/* COUNT */}
+                <span className="shrink-0 text-xs md:text-sm font-semibold tabular-nums text-neutral-400">
+                  {stat.visits.toLocaleString("id-ID")}
+                </span>
+              </div>
+
+              {/* PROGRESS BAR */}
+              <div className="h-1 rounded-full bg-neutral-800/60 overflow-hidden ml-8">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-violet-500 to-fuchsia-500 transition-all duration-700 ease-out"
+                  style={{ width: `${Math.max(percent, 2)}%` }}
+                />
+              </div>
             </div>
-            <span className="text-neutral-500 tabular-nums shrink-0">
-              {stat.visits.toLocaleString("id-ID")}
-            </span>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase-browser";
 
 type Props = {
@@ -70,8 +70,13 @@ export default function MobileBottomNav({ onProfileClick }: Props) {
   const [avatarUrl, setAvatarUrl] = useState("");
   const [avatarInitial, setAvatarInitial] = useState("F");
   const [status, setStatus] = useState<"online" | "offline" | "busy" | "away">("online");
+  const [hidden, setHidden] = useState(false);
 
-  // Load saved preference + status
+  // Refs buat scroll tracking (biar gak re-render tiap pixel)
+  const lastScrollY = useRef(0);
+  const ticking = useRef(false);
+
+  // Load saved preference
   useEffect(() => {
     setMounted(true);
     const saved = localStorage.getItem("mobile-nav-expanded");
@@ -88,6 +93,7 @@ export default function MobileBottomNav({ onProfileClick }: Props) {
     setPathname(currentPath);
   }, [currentPath]);
 
+  // Fetch avatar + status
   useEffect(() => {
     const fetchData = async () => {
       const supabase = createClient();
@@ -119,6 +125,45 @@ export default function MobileBottomNav({ onProfileClick }: Props) {
     fetchData();
   }, []);
 
+  // ===== AUTO-HIDE ON SCROLL =====
+  useEffect(() => {
+    const SCROLL_THRESHOLD = 6; // px — minimun delta biar trigger
+    const TOP_THRESHOLD = 80; // kalo deket atas, selalu show
+
+    const handleScroll = () => {
+      if (ticking.current) return;
+      ticking.current = true;
+
+      requestAnimationFrame(() => {
+        const currentY = window.scrollY;
+        const diff = currentY - lastScrollY.current;
+
+        // Selalu show kalo deket atas
+        if (currentY < TOP_THRESHOLD) {
+          setHidden(false);
+          lastScrollY.current = currentY;
+          ticking.current = false;
+          return;
+        }
+
+        // Scroll DOWN — sembunyiin
+        if (diff > SCROLL_THRESHOLD) {
+          setHidden(true);
+        }
+        // Scroll UP — munculin
+        else if (diff < -SCROLL_THRESHOLD) {
+          setHidden(false);
+        }
+
+        lastScrollY.current = currentY;
+        ticking.current = false;
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   const isActive = (href: string) => {
     if (href === "/") return pathname === "/";
     return pathname.startsWith(href);
@@ -144,7 +189,15 @@ export default function MobileBottomNav({ onProfileClick }: Props) {
   return (
     <nav
       className="lg:hidden fixed bottom-4 left-0 right-0 z-30 pointer-events-none px-3"
-      style={{ transform: "translateZ(0)" }}
+      style={{
+        transform: hidden
+          ? "translate3d(0, 140%, 0)"
+          : "translate3d(0, 0, 0)",
+        transition: "transform 350ms cubic-bezier(0.16, 1, 0.3, 1)",
+        willChange: "transform",
+        backfaceVisibility: "hidden",
+        WebkitBackfaceVisibility: "hidden",
+      }}
     >
       <div
         className={`mx-auto relative pointer-events-auto ${
@@ -158,7 +211,7 @@ export default function MobileBottomNav({ onProfileClick }: Props) {
           WebkitBackfaceVisibility: "hidden",
         }}
       >
-        {/* ===== CHEVRON TAB ===== */}
+        {/* CHEVRON TAB */}
         <button
           onClick={() => setExpanded(!expanded)}
           className="absolute left-1/2 z-20 h-6 px-3 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-500 hover:text-violet-400 hover:border-violet-500/40 hover:bg-neutral-800 shadow-lg shadow-black/40 group"
@@ -180,7 +233,7 @@ export default function MobileBottomNav({ onProfileClick }: Props) {
           </span>
         </button>
 
-        {/* ===== MAIN PILL ===== */}
+        {/* MAIN PILL */}
         <div
           className={`rounded-full border border-neutral-800/80 bg-neutral-950/95 backdrop-blur-2xl shadow-2xl shadow-black/60 ${
             expanded ? "h-14 px-1.5" : "h-12 px-1.5"
@@ -203,6 +256,7 @@ export default function MobileBottomNav({ onProfileClick }: Props) {
                 <Link
                   key={item.href}
                   href={item.href}
+                  prefetch={true}
                   className={`relative flex items-center justify-center group ${
                     expanded
                       ? "flex-col gap-0 rounded-full px-2 py-1 min-w-[44px]"
@@ -245,7 +299,7 @@ export default function MobileBottomNav({ onProfileClick }: Props) {
               );
             })}
 
-            {/* ===== AVATAR BUTTON ===== */}
+            {/* AVATAR BUTTON */}
             <button
               onClick={onProfileClick}
               className={`relative flex items-center justify-center group text-neutral-500 hover:text-white ${
@@ -270,7 +324,8 @@ export default function MobileBottomNav({ onProfileClick }: Props) {
                     expanded ? "h-5 w-5 text-[9px]" : "h-4.5 w-4.5 text-[8px]"
                   }`}
                   style={{
-                    transition: "width 350ms cubic-bezier(0.22, 1, 0.36, 1), height 350ms cubic-bezier(0.22, 1, 0.36, 1)",
+                    transition:
+                      "width 350ms cubic-bezier(0.22, 1, 0.36, 1), height 350ms cubic-bezier(0.22, 1, 0.36, 1)",
                     willChange: "width, height",
                   }}
                 >
@@ -290,7 +345,8 @@ export default function MobileBottomNav({ onProfileClick }: Props) {
                     statusColors[status]
                   } ${expanded ? "h-2.5 w-2.5" : "h-2 w-2"}`}
                   style={{
-                    transition: "width 350ms cubic-bezier(0.22, 1, 0.36, 1), height 350ms cubic-bezier(0.22, 1, 0.36, 1)",
+                    transition:
+                      "width 350ms cubic-bezier(0.22, 1, 0.36, 1), height 350ms cubic-bezier(0.22, 1, 0.36, 1)",
                   }}
                 />
               </div>

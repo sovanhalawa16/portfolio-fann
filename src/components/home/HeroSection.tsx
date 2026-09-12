@@ -115,17 +115,6 @@ export default function HeroSection({ profile, media }: Props) {
               media={media}
               fallbackInitial={profile?.name?.charAt(0)?.toUpperCase() || "F"}
             />
-
-            {/* FLOATING BADGE — LOCATION (masih ada) */}
-            {mounted && profile?.location && (
-              <div className="absolute -top-2 right-2 md:right-0 rounded-xl md:rounded-2xl border border-neutral-800 bg-neutral-900/95 backdrop-blur px-3 py-1.5 md:px-3.5 md:py-2 shadow-xl z-20 max-w-[150px]">
-                <div className="flex items-center gap-1.5 md:gap-2 text-[11px] md:text-xs">
-                  <Icons.MapPin className="w-3 h-3 md:w-3.5 md:h-3.5 text-violet-400 shrink-0" />
-                  <span className="font-medium truncate">{profile.location}</span>
-                </div>
-              </div>
-            )}
-
             {/* ✅ BADGE AVAILABLE — DIHAPUS (sesuai request) */}
           </div>
         </div>

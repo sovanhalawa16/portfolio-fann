@@ -191,7 +191,6 @@ function ProjectCard({ project }: { project: Project }) {
   );
 }
 
-// ========== LATEST POSTS ==========
 export function LatestPosts({ posts }: { posts: Post[] }) {
   if (!posts || posts.length === 0) return null;
 
@@ -209,21 +208,10 @@ export function LatestPosts({ posts }: { posts: Post[] }) {
         href="/blog"
       />
 
-      {/* MOBILE: horizontal scroll */}
-      <div className="md:hidden -mx-6 px-6 overflow-x-auto snap-x snap-mandatory scrollbar-hide">
-        <div className="flex gap-3 pb-2">
-          {posts.map((post) => (
-            <div key={post.id} className="snap-start shrink-0 w-[75vw] max-w-[280px]">
-              <PostCard post={post} calcReadingTime={calcReadingTime} />
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* DESKTOP: grid */}
-      <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* GRID — 2 KOLOM MOBILE, 3 KOLOM DESKTOP */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
         {posts.map((post, i) => (
-          <ScrollReveal key={post.id} delay={i * 80}>
+          <ScrollReveal key={post.id} delay={i * 60}>
             <PostCard post={post} calcReadingTime={calcReadingTime} />
           </ScrollReveal>
         ))}

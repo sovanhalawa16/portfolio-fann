@@ -32,7 +32,7 @@ export default async function HomePage() {
       )
       .eq("status", "published")
       .order("published_at", { ascending: false })
-      .limit(3),
+      .limit(4),
     supabase
       .from("portfolio")
       .select("*", { count: "exact" })
@@ -44,7 +44,7 @@ export default async function HomePage() {
       )
       .eq("status", "published")
       .eq("featured", true)
-      .limit(3),
+      .limit(4),
     supabase
       .from("experiences")
       .select("*")
