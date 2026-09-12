@@ -6,6 +6,7 @@ import MobileBottomNav from "./MobileBottomNav";
 import UtilityBar from "./UtilityBar";
 import CommandPalette from "./CommandPalette";
 import Footer from "@/components/Footer";
+import VisitTracker from "@/components/VisitTracker";
 
 export default function PublicShell({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -64,6 +65,7 @@ export default function PublicShell({ children }: { children: React.ReactNode })
 
   return (
     <div className="min-h-screen bg-neutral-950">
+      <VisitTracker />
       <PublicSidebar
         collapsed={collapsed}
         onToggleCollapse={() => setCollapsed(!collapsed)}

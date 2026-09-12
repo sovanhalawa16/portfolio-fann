@@ -30,6 +30,12 @@ const Icons = {
       <rect x="14" y="14" width="7" height="7" rx="1" />
     </svg>
   ),
+  Publications: (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+      <circle cx="12" cy="8" r="6" />
+      <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11" />
+    </svg>
+  ),
   About: (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
       <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
@@ -52,6 +58,7 @@ const NAV_ITEMS = [
   { label: "Home", href: "/", icon: Icons.Home },
   { label: "Blog", href: "/blog", icon: Icons.Blog },
   { label: "Projects", href: "/projects", icon: Icons.Projects },
+  { label: "Publications", href: "/publications", shortLabel: "Pub", icon: Icons.Publications },
   { label: "About", href: "/about", icon: Icons.About },
 ];
 
@@ -64,6 +71,7 @@ export default function MobileBottomNav({ onProfileClick }: Props) {
   const [avatarInitial, setAvatarInitial] = useState("F");
   const [status, setStatus] = useState<"online" | "offline" | "busy" | "away">("online");
 
+  // Load saved preference + status
   useEffect(() => {
     setMounted(true);
     const saved = localStorage.getItem("mobile-nav-expanded");
@@ -125,7 +133,7 @@ export default function MobileBottomNav({ onProfileClick }: Props) {
 
   if (!mounted) {
     return (
-      <nav className="lg:hidden fixed bottom-4 left-0 right-0 z-30 pointer-events-none px-4">
+      <nav className="lg:hidden fixed bottom-4 left-0 right-0 z-30 pointer-events-none px-3">
         <div className="mx-auto max-w-md pointer-events-auto">
           <div className="h-14 rounded-full border border-neutral-800/80 bg-neutral-950/95" />
         </div>
@@ -134,58 +142,103 @@ export default function MobileBottomNav({ onProfileClick }: Props) {
   }
 
   return (
-    <nav className="lg:hidden fixed bottom-4 left-0 right-0 z-30 pointer-events-none px-4">
+    <nav
+      className="lg:hidden fixed bottom-4 left-0 right-0 z-30 pointer-events-none px-3"
+      style={{ transform: "translateZ(0)" }}
+    >
       <div
-        className={`mx-auto relative pointer-events-auto transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] ${
-          expanded ? "max-w-md" : "max-w-[240px]"
+        className={`mx-auto relative pointer-events-auto ${
+          expanded ? "max-w-md" : "max-w-[260px]"
         }`}
+        style={{
+          transition:
+            "max-width 550ms cubic-bezier(0.22, 1, 0.36, 1), opacity 350ms ease-out",
+          willChange: "max-width",
+          backfaceVisibility: "hidden",
+          WebkitBackfaceVisibility: "hidden",
+        }}
       >
-        {/* ===== CHEVRON TAB (floating di atas pill) ===== */}
+        {/* ===== CHEVRON TAB ===== */}
         <button
           onClick={() => setExpanded(!expanded)}
-          className="absolute left-1/2 -translate-x-1/2 -top-3 z-20 h-6 px-3 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-500 hover:text-violet-400 hover:border-violet-500/40 hover:bg-neutral-800 transition-all duration-200 shadow-lg shadow-black/40 group"
+          className="absolute left-1/2 z-20 h-6 px-3 rounded-full bg-neutral-900 border border-neutral-800 flex items-center justify-center text-neutral-500 hover:text-violet-400 hover:border-violet-500/40 hover:bg-neutral-800 shadow-lg shadow-black/40 group"
+          style={{
+            top: "-12px",
+            transform: "translate3d(-50%, 0, 0)",
+            transition:
+              "color 200ms ease, border-color 200ms ease, background-color 200ms ease",
+            willChange: "transform",
+            backfaceVisibility: "hidden",
+          }}
           aria-label={expanded ? "Kecilkan navigasi" : "Perbesar navigasi"}
         >
-          <span className="transition-transform duration-300 group-hover:scale-110">
+          <span
+            className="transition-transform duration-300 group-hover:scale-110"
+            style={{ transform: "translateZ(0)" }}
+          >
             {expanded ? Icons.ChevronDown : Icons.ChevronUp}
           </span>
         </button>
 
         {/* ===== MAIN PILL ===== */}
         <div
-          className={`rounded-full border border-neutral-800/80 bg-neutral-950/95 backdrop-blur-2xl shadow-2xl shadow-black/60 transition-all duration-500 ${
-            expanded ? "h-14 px-2" : "h-12 px-1.5"
+          className={`rounded-full border border-neutral-800/80 bg-neutral-950/95 backdrop-blur-2xl shadow-2xl shadow-black/60 ${
+            expanded ? "h-14 px-1.5" : "h-12 px-1.5"
           }`}
+          style={{
+            transition:
+              "height 550ms cubic-bezier(0.22, 1, 0.36, 1), padding 550ms cubic-bezier(0.22, 1, 0.36, 1)",
+            willChange: "height, padding",
+            backfaceVisibility: "hidden",
+            WebkitBackfaceVisibility: "hidden",
+            transform: "translateZ(0)",
+          }}
         >
-          <div
-            className={`h-full flex items-center justify-around transition-all duration-300 ${
-              expanded ? "gap-0.5" : "gap-0"
-            }`}
-          >
+          <div className="h-full flex items-center justify-around">
             {NAV_ITEMS.map((item) => {
               const active = isActive(item.href);
+              const displayLabel = (item as any).shortLabel || item.label;
+
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`relative flex items-center justify-center transition-all duration-300 group ${
+                  className={`relative flex items-center justify-center group ${
                     expanded
-                      ? "flex-col gap-0 rounded-full px-3.5 py-1.5 min-w-[52px]"
-                      : "rounded-full p-2.5 min-w-[42px]"
+                      ? "flex-col gap-0 rounded-full px-2 py-1 min-w-[44px]"
+                      : "rounded-full p-2.5 min-w-[40px]"
                   } ${
                     active
                       ? "bg-gradient-to-br from-violet-500/20 to-fuchsia-500/15 text-violet-300 shadow-inner"
-                      : "text-neutral-500 hover:text-white active:scale-95"
+                      : "text-neutral-500 hover:text-white"
                   }`}
+                  style={{
+                    transition:
+                      "background-color 300ms cubic-bezier(0.22, 1, 0.36, 1), color 250ms ease, transform 150ms cubic-bezier(0.22, 1, 0.36, 1)",
+                    willChange: "transform, background-color",
+                    transform: "translateZ(0)",
+                    backfaceVisibility: "hidden",
+                    WebkitBackfaceVisibility: "hidden",
+                  }}
                 >
-                  {item.icon}
+                  <span
+                    className="shrink-0"
+                    style={{ transform: "translateZ(0)" }}
+                  >
+                    {item.icon}
+                  </span>
+
                   {expanded && (
                     <span
-                      className={`text-[10px] font-semibold transition-all duration-200 leading-none mt-0.5 ${
+                      className={`text-[9px] font-semibold leading-none mt-0.5 whitespace-nowrap ${
                         active ? "text-violet-300" : "text-neutral-500"
                       }`}
+                      style={{
+                        transition: "opacity 250ms ease-out, color 250ms ease",
+                        willChange: "opacity",
+                      }}
                     >
-                      {item.label}
+                      {displayLabel}
                     </span>
                   )}
                 </Link>
@@ -195,32 +248,61 @@ export default function MobileBottomNav({ onProfileClick }: Props) {
             {/* ===== AVATAR BUTTON ===== */}
             <button
               onClick={onProfileClick}
-              className={`relative flex items-center justify-center transition-all duration-300 group ${
+              className={`relative flex items-center justify-center group text-neutral-500 hover:text-white ${
                 expanded
-                  ? "flex-col gap-0 rounded-full px-3.5 py-1.5 min-w-[52px]"
-                  : "rounded-full p-2.5 min-w-[42px]"
-              } text-neutral-500 hover:text-white active:scale-95`}
+                  ? "flex-col gap-0 rounded-full px-2 py-1 min-w-[44px]"
+                  : "rounded-full p-2.5 min-w-[40px]"
+              }`}
+              style={{
+                transition:
+                  "color 250ms ease, transform 150ms cubic-bezier(0.22, 1, 0.36, 1)",
+                willChange: "transform",
+                transform: "translateZ(0)",
+                backfaceVisibility: "hidden",
+              }}
             >
-              <div className="relative">
+              <div
+                className="relative"
+                style={{ transform: "translateZ(0)" }}
+              >
                 <div
-                  className={`rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center font-bold text-white overflow-hidden ring-2 ring-transparent group-hover:ring-violet-500/30 transition-all ${
+                  className={`rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center font-bold text-white overflow-hidden ring-2 ring-transparent group-hover:ring-violet-500/30 ${
                     expanded ? "h-5 w-5 text-[9px]" : "h-4.5 w-4.5 text-[8px]"
                   }`}
+                  style={{
+                    transition: "width 350ms cubic-bezier(0.22, 1, 0.36, 1), height 350ms cubic-bezier(0.22, 1, 0.36, 1)",
+                    willChange: "width, height",
+                  }}
                 >
                   {avatarUrl ? (
-                    <img src={avatarUrl} alt="Profile" className="h-full w-full object-cover" />
+                    <img
+                      src={avatarUrl}
+                      alt="Profile"
+                      className="h-full w-full object-cover"
+                      style={{ transform: "translateZ(0)" }}
+                    />
                   ) : (
                     avatarInitial
                   )}
                 </div>
                 <span
-                  className={`absolute -bottom-0.5 -right-0.5 rounded-full ring-2 ring-neutral-950 ${statusColors[status]} ${
-                    expanded ? "h-2.5 w-2.5" : "h-2 w-2"
-                  }`}
+                  className={`absolute -bottom-0.5 -right-0.5 rounded-full ring-2 ring-neutral-950 ${
+                    statusColors[status]
+                  } ${expanded ? "h-2.5 w-2.5" : "h-2 w-2"}`}
+                  style={{
+                    transition: "width 350ms cubic-bezier(0.22, 1, 0.36, 1), height 350ms cubic-bezier(0.22, 1, 0.36, 1)",
+                  }}
                 />
               </div>
+
               {expanded && (
-                <span className="text-[10px] font-semibold leading-none mt-0.5 text-neutral-500">
+                <span
+                  className="text-[9px] font-semibold leading-none mt-0.5 text-neutral-500"
+                  style={{
+                    transition: "opacity 250ms ease-out",
+                    willChange: "opacity",
+                  }}
+                >
                   Profile
                 </span>
               )}
