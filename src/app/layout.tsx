@@ -3,7 +3,9 @@ import { Inter } from "next/font/google";
 import { Suspense } from "react";
 import { createClient } from "@/lib/supabase-server";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import "katex/dist/katex.min.css";
 import "./globals.css";
+
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 

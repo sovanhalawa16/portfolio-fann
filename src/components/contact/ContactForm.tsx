@@ -195,7 +195,7 @@ export default function ContactForm() {
       </button>
 
       <p className="text-[10px] text-neutral-600 text-center">
-        Pesan lo aman & gak bakal disebar ke pihak lain.
+        Pesan kamu aman & gak bakal disebar ke pihak lain.
       </p>
     </form>
   );

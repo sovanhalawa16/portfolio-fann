@@ -25,6 +25,7 @@ import { TableCell } from "@tiptap/extension-table";
 import { TableHeader } from "@tiptap/extension-table";
 import Youtube from "@tiptap/extension-youtube";
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight";
+import Mathematics from "@tiptap/extension-mathematics";
 import { common, createLowlight } from "lowlight";
 import { useEffect, useRef, useState } from "react";
 
@@ -95,6 +96,11 @@ export default function RichTextEditor({
         HTMLAttributes: { class: "rounded-lg overflow-hidden my-4" },
       }),
       CodeBlockLowlight.configure({ lowlight }),
+      Mathematics.configure({
+  katexOptions: {
+    throwOnError: false,
+  },
+}),
     ],
     content: value || "",
     editorProps: {
@@ -559,6 +565,27 @@ export default function RichTextEditor({
           title="Code Block"
         >
           {"{ }"}
+          <ToolbarButton
+  onClick={() => {
+    const latex = window.prompt(
+      "Masukkan rumus LaTeX:\n\nContoh:\n• x^2 + y^2 = z^2\n• \\frac{a}{b}\n• \\sum_{i=1}^{n} x_i",
+      "x^2 + y^2 = z^2"
+    );
+    if (latex) {
+      editor
+        .chain()
+        .focus()
+        .insertContent({
+          type: "inlineMath",
+          attrs: { latex: latex.trim() },
+        })
+        .run();
+    }
+  }}
+  title="Sisipkan Rumus"
+>
+  Σ
+</ToolbarButton>
         </ToolbarButton>
 
         {/* TABLE */}
