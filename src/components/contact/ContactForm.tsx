@@ -115,7 +115,7 @@ export default function ContactForm() {
             name="name"
             value={form.name}
             onChange={handleChange}
-            placeholder="Nama lo"
+            placeholder="Nama kamu"
             required
             className="w-full rounded-lg border border-neutral-800 bg-neutral-950 px-3 py-2.5 text-sm placeholder:text-neutral-600 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition"
           />
@@ -160,7 +160,7 @@ export default function ContactForm() {
           name="body"
           value={form.body}
           onChange={handleChange}
-          placeholder="Tulis pesan lo di sini..."
+          placeholder="Tulis pesan kamu di sini..."
           rows={6}
           required
           className="w-full rounded-lg border border-neutral-800 bg-neutral-950 px-3 py-2.5 text-sm placeholder:text-neutral-600 focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition resize-none leading-relaxed"

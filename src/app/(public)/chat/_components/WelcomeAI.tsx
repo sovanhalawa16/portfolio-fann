@@ -35,11 +35,11 @@ export default function WelcomeAI({
 
       {/* TITLE */}
       <h2 className="text-xl md:text-2xl font-bold mb-2">
-        Hai! Gue Fann AI 👋
+        Hai! Saya Fann AI 👋
       </h2>
       <p className="text-sm text-neutral-400 leading-relaxed mb-6">
         Tanya apa aja tentang Fann — pengalaman, project, publikasi, atau
-        sekadar ngobrol santai. Gue siap bantu!
+        sekadar ngobrol santai. Saya siap bantu!
       </p>
 
       {/* QUICK PROMPTS */}

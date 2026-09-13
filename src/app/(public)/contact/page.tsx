@@ -83,7 +83,7 @@ export default async function ContactPage() {
           <p className="text-sm md:text-base text-neutral-400 max-w-2xl leading-relaxed">
             Mau kerja sama, punya pertanyaan, atau sekadar ngobrol soal
             teknologi? Kirim pesan lewat form atau langsung hubungi saya di
-            platform favorit lo.
+            platform favorit mu.
           </p>
         </div>
       </ScrollReveal>

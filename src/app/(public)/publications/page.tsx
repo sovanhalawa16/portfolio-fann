@@ -46,8 +46,7 @@ export default async function PublicationsPage() {
         </h1>
 
         <p className="text-sm md:text-base text-neutral-400 max-w-2xl leading-relaxed mb-6">
-          Kumpulan publikasi ilmiah saya — dari jurnal nasional sampai
-          konferensi internasional. Beberapa open access, beberapa di-publish
+          Kumpulan publikasi ilmiah saya. Beberapa open access, beberapa di-publish
           di jurnal terindeks.
         </p>
 

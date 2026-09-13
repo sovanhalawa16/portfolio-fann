@@ -48,7 +48,7 @@ export default async function BlogListPage() {
 
         <p className="text-sm md:text-base text-neutral-400 max-w-2xl leading-relaxed mb-5">
           saya nulis tentang web development, produk digital, dan hal-hal yang saya
-          pelajarin. Kadang panjang, kadang pendek — yang penting bermanfaat.
+          pelajarin. Kadang panjang, kadang pendek yang penting bermanfaat.
         </p>
 
         {/* STATS */}

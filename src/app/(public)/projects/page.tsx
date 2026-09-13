@@ -42,7 +42,7 @@ export default async function ProjectsPage() {
         </h1>
 
         <p className="text-sm md:text-base text-neutral-400 max-w-2xl leading-relaxed mb-5">
-          Kumpulan project yang pernah saya kerjain — dari yang serius sampai
+          Kumpulan project yang pernah saya kerjain dari yang serius sampai
           yang cuma buat belajar. Beberapa open source, beberapa private.
         </p>
 

@@ -207,7 +207,7 @@ export default function ProfilePage() {
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Nama lo..."
+                placeholder="Nama kamu..."
                 className="w-full rounded-lg border border-neutral-800 bg-neutral-950 px-4 py-3 text-base focus:border-violet-500 focus:outline-none focus:ring-2 focus:ring-violet-500/20 transition"
               />
             </div>
@@ -351,7 +351,7 @@ export default function ProfilePage() {
                 />
               )}
               <div>
-                <div className="font-bold">{name || "Nama Lo"}</div>
+                <div className="font-bold">{name || "Nama kamu"}</div>
                 {taglines.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-1">
                     {taglines.map((t) => (
