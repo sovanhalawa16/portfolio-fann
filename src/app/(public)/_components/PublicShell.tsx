@@ -7,7 +7,6 @@ import UtilityBar from "./UtilityBar";
 import CommandPalette from "./CommandPalette";
 import Footer from "@/components/Footer";
 import VisitTracker from "@/components/VisitTracker";
-import VisitorCountries from "@/components/VisitorCountries";
 
 export default function PublicShell({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
@@ -82,11 +81,6 @@ export default function PublicShell({ children }: { children: React.ReactNode })
         <UtilityBar onSearchOpen={() => setSearchOpen(true)} />
 
         <main className="min-h-screen pb-24 lg:pb-0">{children}</main>
-
-        {/* ✅ VISITOR COUNTRIES — SECTION DI ATAS FOOTER */}
-        <section className="mx-auto max-w-6xl px-6 lg:px-8 py-12 md:py-16">
-          <VisitorCountries />
-        </section>
 
         <Footer />
       </div>
