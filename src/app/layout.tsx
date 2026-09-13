@@ -3,9 +3,7 @@ import { Inter } from "next/font/google";
 import { Suspense } from "react";
 import { createClient } from "@/lib/supabase-server";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
-import "katex/dist/katex.min.css";
 import "./globals.css";
-
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -27,23 +25,35 @@ export async function generateMetadata(): Promise<Metadata> {
     {}
   );
 
-  const siteTitle = settings.site_title || "Fann — Developer & Writer";
+  const siteTitle =
+    settings.site_title || "SOVANTRI PUTRA PASKAH HALAWA | PORTOFOLIO";
   const description =
     settings.site_description ||
-    "Blog pribadi dan portofolio saya. Menulis tentang kode, produk, dan kehidupan.";
-  const keywords = settings.site_keywords || "developer, writer, portfolio";
-  const author = settings.author_name || "Fann";
+    "Portofolio, blog, dan publikasi Sovantri Putra Paskah Halawa — Developer & Writer.";
+  const keywords =
+    settings.site_keywords ||
+    "sovantri putra paskah halawa, fann, web developer, portfolio, blog";
+  const author = settings.author_name || "Sovantri Putra Paskah Halawa";
   const ogImage = settings.og_image || "";
 
   return {
     title: {
       default: siteTitle,
-      template: `%s`,
+      template: `%s | ${siteTitle}`,
     },
     description,
     keywords,
     authors: [{ name: author }],
     creator: author,
+    metadataBase: new URL(
+      process.env.NEXT_PUBLIC_SITE_URL || "https://fannhalawa.vercel.app"
+    ),
+
+    // ✅ GOOGLE SITE VERIFICATION
+    verification: {
+      google: "QzTZnbeZ3CWrmHB1Yh-ftj7dC9YnSBKHqmgX7apWKx4",
+    },
+
     openGraph: {
       type: "website",
       locale: "id_ID",
@@ -58,9 +68,6 @@ export async function generateMetadata(): Promise<Metadata> {
       description,
       images: ogImage ? [ogImage] : [],
     },
-    metadataBase: new URL(
-      process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000"
-    ),
   };
 }
 
@@ -71,7 +78,6 @@ async function getAnalyticsId(): Promise<string> {
     .select("value")
     .eq("key", "analytics_id")
     .maybeSingle();
-
   return data?.value || "";
 }
 
