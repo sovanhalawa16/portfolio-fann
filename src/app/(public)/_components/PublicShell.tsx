@@ -1,18 +1,23 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import PublicSidebar from "./PublicSidebar";
 import MobileBottomNav from "./MobileBottomNav";
 import UtilityBar from "./UtilityBar";
 import CommandPalette from "./CommandPalette";
 import Footer from "@/components/Footer";
 import VisitTracker from "@/components/VisitTracker";
+import ChatPageHeader from "../chat/_components/ChatPageHeader";
 
 export default function PublicShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+
+  const isChatPage = pathname?.startsWith("/chat") ?? false;
 
   useEffect(() => {
     setMounted(true);
@@ -78,14 +83,35 @@ export default function PublicShell({ children }: { children: React.ReactNode })
           collapsed ? "lg:pl-[88px]" : "lg:pl-[300px]"
         }`}
       >
-        <UtilityBar onSearchOpen={() => setSearchOpen(true)} />
+        {/* UtilityBar — hidden di chat */}
+        {!isChatPage && <UtilityBar onSearchOpen={() => setSearchOpen(true)} />}
 
-        <main className="min-h-screen pb-24 lg:pb-0">{children}</main>
+        {/* Header chat — cuma di /chat */}
+        {isChatPage && (
+          <div className="lg:max-w-5xl lg:mx-auto lg:w-full">
+            <ChatPageHeader />
+          </div>
+        )}
 
-        <Footer />
+        {/* Main content */}
+        <main
+          className={
+            isChatPage
+              ? "h-[calc(100dvh-100px)] lg:h-[calc(100dvh-120px)] overflow-hidden"
+              : "min-h-screen pb-24 lg:pb-0"
+          }
+        >
+          {children}
+        </main>
+
+        {/* Footer — hidden di chat */}
+        {!isChatPage && <Footer />}
       </div>
 
-      <MobileBottomNav onProfileClick={() => setMobileOpen(true)} />
+      {/* Mobile bottom nav — hidden di chat */}
+      {!isChatPage && (
+        <MobileBottomNav onProfileClick={() => setMobileOpen(true)} />
+      )}
 
       <CommandPalette open={searchOpen} onClose={() => setSearchOpen(false)} />
     </div>

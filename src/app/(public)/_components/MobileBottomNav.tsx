@@ -52,6 +52,11 @@ const Icons = {
       <path d="M6 9l6 6 6-6" />
     </svg>
   ),
+  Chat: (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+    <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" />
+  </svg>
+),
 };
 
 const NAV_ITEMS = [
@@ -59,7 +64,9 @@ const NAV_ITEMS = [
   { label: "Blog", href: "/blog", icon: Icons.Blog },
   { label: "Projects", href: "/projects", icon: Icons.Projects },
   { label: "Publications", href: "/publications", shortLabel: "Pub", icon: Icons.Publications },
+  { label: "Chat", href: "/chat", shortLabel: "Chat", icon: Icons.Chat },
   { label: "About", href: "/about", icon: Icons.About },
+  
 ];
 
 export default function MobileBottomNav({ onProfileClick }: Props) {
@@ -175,7 +182,10 @@ export default function MobileBottomNav({ onProfileClick }: Props) {
     away: "bg-yellow-500",
     offline: "bg-neutral-500",
   };
-
+    // Hide di halaman chat
+  const isChatPage = pathname.startsWith("/chat");
+  if (isChatPage) return null;
+  
   if (!mounted) {
     return (
       <nav className="lg:hidden fixed bottom-4 left-0 right-0 z-30 pointer-events-none px-3">
