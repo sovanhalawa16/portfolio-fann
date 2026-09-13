@@ -315,11 +315,59 @@ body {
 .hljs-strong { font-weight: 700; }
 
 /* ============================================
-   YOUTUBE EMBED
+   YOUTUBE EMBED — RESPONSIVE
    ============================================ */
-.ProseMirror iframe {
-  border-radius: 0.5rem;
+
+/* Prose (artikel public) */
+.prose iframe,
+.prose [data-youtube-video],
+.prose div[data-youtube-video] {
+  width: 100% !important;
+  max-width: 100% !important;
+  aspect-ratio: 16 / 9;
+  height: auto !important;
+  border-radius: 0.75rem;
+  margin: 1.5rem 0;
+  display: block;
+}
+
+.prose iframe {
+  position: relative;
+}
+
+/* Wrapper khusus YouTube dari Tiptap */
+.ProseMirror [data-youtube-video] {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  margin: 1.5rem 0;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.ProseMirror [data-youtube-video] iframe {
+  width: 100% !important;
+  height: 100% !important;
   max-width: 100%;
+  border-radius: 0.75rem;
+  display: block;
+}
+
+/* Editor preview juga */
+.ProseMirror iframe {
+  width: 100% !important;
+  max-width: 100%;
+  border-radius: 0.75rem;
+}
+
+/* Fallback: iframe biasa tanpa wrapper */
+article iframe,
+main iframe {
+  width: 100% !important;
+  max-width: 100% !important;
+  aspect-ratio: 16 / 9;
+  height: auto !important;
+  border-radius: 0.75rem;
+  margin: 1.5rem 0;
 }
 
 /* ============================================

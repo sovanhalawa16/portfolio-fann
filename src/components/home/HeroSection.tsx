@@ -49,9 +49,6 @@ export default function HeroSection({ profile, media }: Props) {
           {/* LEFT */}
           <div className="order-2 lg:order-1 min-w-0">
             <div className="inline-flex items-center gap-2 rounded-full border border-neutral-800 bg-neutral-900/60 backdrop-blur px-3 py-1.5 text-xs text-neutral-400 mb-5">
-              <Icons.Sparkles className="w-3.5 h-3.5 text-violet-400 shrink-0" />
-              <span className="truncate">Available for collaboration</span>
-              <span className="w-px h-3 bg-neutral-700 mx-0.5 shrink-0" />
               <LiveVisitor showLabel={false} className="text-xs shrink-0" />
             </div>
 
